@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Added rest_framework, djoser, LittleLemonAPI
+    # Added rest_framework, djoser, authtoken, LittleLemonAPI
     "rest_framework",
+    "rest_framework.authtoken",
     "djoser",
     "LittleLemonAPI.apps.LittlelemonapiConfig",
 ]
