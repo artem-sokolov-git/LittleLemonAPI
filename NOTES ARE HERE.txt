@@ -1,0 +1,30 @@
+ADMIN:
+    login: admin
+    password: admin123
+
+MANAGERS:
+    MANAGER_1:
+        login: alicejohnson
+        password: 7iF54Hq#ub7nP8b
+
+    MANAGER_2:
+        login: bobbrown
+        password: rc3i.X3brxXZnbg
+
+CUSTOMERS:
+    CUSTOMER_1:
+        login: charliedavis
+        password: @fHWYMFYBi.i!89
+
+    CUSTOMER_2:
+        login: dianawhite
+        password: 3rt..v*U!KBghU@
+
+DELIVERY_CREW:
+    DELIVERMAN_1:
+        login: edwardgreen
+        password: .aTc3#ti.ed86QK
+
+    DELIVERMAN_2:
+        login: fionablack
+        password: !!L2M!CEEgm#zi7
