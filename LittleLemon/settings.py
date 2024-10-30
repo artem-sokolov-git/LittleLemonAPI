@@ -37,11 +37,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Added rest_framework, djoser, authtoken, LittleLemonAPI
+    # Added LittleLemonAPI, rest_framework, authtoken, djozer
+    # It is important to follow this order.
+    "LittleLemonAPI",
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
-    "LittleLemonAPI.apps.LittlelemonapiConfig",
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,15 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+        # Add Djozer
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+}
+
+DJOSER = {
+    "USER_ID_FIELD": "username",
+}
