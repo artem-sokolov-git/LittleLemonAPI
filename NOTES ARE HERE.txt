@@ -1,6 +1,10 @@
-ADMIN:
-    login: admin
-    password: admin123
+SUPERUSER:
+    login: superuser
+    password: superuser123
+
+ADMINS:
+    login: frankblack
+    password: p#LFe#sVEdxT3Lx
 
 MANAGERS:
     MANAGER_1:
