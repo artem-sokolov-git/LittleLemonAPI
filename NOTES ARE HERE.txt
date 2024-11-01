@@ -3,6 +3,7 @@ SUPERUSER:
     password: superuser123
 
 ADMINS:
+    ADMIN:
     login: frankblack
     password: p#LFe#sVEdxT3Lx
 
@@ -14,15 +15,6 @@ MANAGERS:
     MANAGER_2:
         login: bobbrown
         password: rc3i.X3brxXZnbg
-
-CUSTOMERS:
-    CUSTOMER_1:
-        login: charliedavis
-        password: @fHWYMFYBi.i!89
-
-    CUSTOMER_2:
-        login: dianawhite
-        password: 3rt..v*U!KBghU@
 
 DELIVERY_CREW:
     DELIVERMAN_1:
