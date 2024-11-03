@@ -1,16 +1,23 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
+from rest_framework.authtoken.models import Token
 
-from LittleLemonAPI.models import Category, MenuItem  # noqa: W291
+from LittleLemonAPI.models import Category, MenuItem
 
 restaurant_staff = (
     # ["login", "password", "group"]
-    ["frankblack", "p#LFe#sVEdxT3Lx", "Admins"],
-    ["alicejohnson", "7iF54Hq#ub7nP8b", "Managers"],
-    ["bobbrown", "rc3i.X3brxXZnbg", "Managers"],
-    ["edwardgreen", ".aTc3#ti.ed86QK", "Deliverers"],
-    ["fionablack", "!!L2M!CEEgm#zi7", "Deliverers"],
+    ["frankblack", "Fr@nk2007", "Admins"],
+    ["alicejohnson", "Al!ce2013", "Managers"],
+    ["bobbrown", "B0b!Brown23", "Managers"],
+    ["edwardgreen", "Edw@rdG1reen", "Deliverers"],
+    ["fionablack", "F10n@BlaCk!", "Deliverers"],
 )
+
+group_permissions = {
+    "Admins": ["add_category", "add_menuitem"],
+    # "Managers": {...},
+    # "Deliverers": {...},
+}
 
 menu_items = (
     # ["title", "price", "category"]
@@ -44,13 +51,28 @@ class Command(BaseCommand):
             # Creates an employee if not.
             employee, created = User.objects.get_or_create(
                 username=login,
-                defaults={"password": password, "email": f"{login}@gmail.com"},
+                defaults={
+                    "password": password,
+                    "email": f"{login}@gmail.com",
+                    "is_staff": True,
+                },
             )
+
             if created:
-                # creates a group if there is no such group
-                group, _ = Group.objects.get_or_create(name=role)
-                # adds the employee to the appropriate group
-                employee.groups.add(group)
+                employee.set_password(password)
+                employee.save()
+
+            # creates a group if there is no such group
+            group, _ = Group.objects.get_or_create(name=role)
+            employee.groups.add(group)
+
+            if role in group_permissions:
+                for codename in group_permissions[role]:
+                    permission = Permission.objects.get(codename=codename)
+                    group.permissions.add(permission)
+
+            # creates tokens
+            token, _ = Token.objects.get_or_create(user=employee)
 
         for title, price, category in menu_items:
             category_obj, _ = Category.objects.get_or_create(
