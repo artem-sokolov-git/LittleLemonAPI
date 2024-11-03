@@ -53,7 +53,7 @@ class Command(BaseCommand):
                 username=login,
                 defaults={
                     "password": password,
-                    "email": f"{login}@gmail.com",
+                    "email": f"{login}@email.com",
                     "is_staff": True,
                 },
             )

@@ -1,21 +1,17 @@
 from rest_framework import serializers
-from .models import Category, MenuItem
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ("title",)
+from .models import MenuItem
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="category.title")
+
     class Meta:
         model = MenuItem
         fields = (
+            "category",
             "title",
             "price",
             "featured",
-            "category",
         )
 
     def validate_price(self, value):
