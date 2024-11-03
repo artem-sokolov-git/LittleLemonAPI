@@ -5,10 +5,22 @@ from .models import Category, MenuItem
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ("title",)
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
-        fields = "__all__"
+        fields = (
+            "title",
+            "price",
+            "featured",
+            "category",
+        )
+
+    def validate_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "The price cannot be less than or equal to 0"
+            )
+        return value

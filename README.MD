@@ -4,17 +4,17 @@
 
 ### Admins:
 
-1.  The admin can assign users to the manager group
-2.	You can access the manager group with an admin token
-3.	The admin can add menu items 
-4.	The admin can add categories
+1.  The admin can assign users to the manager group **OK**
+2.	You can access the manager group with an admin token **?**
+3.	The admin can add menu items **OK**
+4.	The admin can add categories **OK**
 
 ### Managers:
 
-5.	Managers can log in 
-6.	Managers can update the item of the day
-7.	Managers can assign users to the delivery crew
-8.	Managers can assign orders to the delivery crew
+5.	Managers can log in  **OK**
+6.	Managers can update the item of the day **OK**
+7.	Managers can assign users to the delivery crew **?**
+8.	Managers can assign orders to the delivery crew **?**
 
 ### Delivery_Crew
 
@@ -23,10 +23,10 @@
 
 ### Customers:
 
-11.	Customers can register
-12.	Customers can log in using their username and password and get access tokens
-13.	Customers can browse all categories 
-14.	Customers can browse all the menu items at once
+11.	Customers can register **OK**
+12.	Customers can log in using their username and password and get access tokens **OK**
+13.	Customers can browse all categories **OK** 
+14.	Customers can browse all the menu items at once **OK**
 15.	Customers can browse menu items by category
 16.	Customers can paginate menu items
 17.	Customers can sort menu items by price
