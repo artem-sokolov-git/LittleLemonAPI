@@ -9,14 +9,27 @@ restaurant_staff = (
     ["frankblack", "Fr@nk2007", "Admins"],
     ["alicejohnson", "Al!ce2013", "Managers"],
     ["bobbrown", "B0b!Brown23", "Managers"],
-    ["edwardgreen", "Edw@rdG1reen", "Deliverers"],
-    ["fionablack", "F10n@BlaCk!", "Deliverers"],
+    ["edwardgreen", "Edw@rdG1reen", "Delivery_Crew"],
+    ["fionablack", "F10n@BlaCk!", "Delivery_Crew"],
+    ["test_user", "test_user_pass_123", None],
 )
 
 group_permissions = {
-    "Admins": ["add_category", "add_menuitem"],
-    # "Managers": {...},
-    # "Deliverers": {...},
+    "Admins": [
+        "add_category",
+        "add_menuitem",
+        "change_category",
+        "change_menuitem",
+        "add_user",
+        "change_user",
+    ],
+    "Managers": [
+        "add_category",
+        "add_menuitem",
+        "change_category",
+        "change_menuitem",
+    ],
+    # "Delivery_Crew": {...},
 }
 
 menu_items = (
@@ -63,13 +76,14 @@ class Command(BaseCommand):
                 employee.save()
 
             # creates a group if there is no such group
-            group, _ = Group.objects.get_or_create(name=role)
-            employee.groups.add(group)
+            if role is not None:
+                group, _ = Group.objects.get_or_create(name=role)
+                employee.groups.add(group)
 
-            if role in group_permissions:
-                for codename in group_permissions[role]:
-                    permission = Permission.objects.get(codename=codename)
-                    group.permissions.add(permission)
+                if role in group_permissions:
+                    for codename in group_permissions[role]:
+                        permission = Permission.objects.get(codename=codename)
+                        group.permissions.add(permission)
 
             # creates tokens
             token, _ = Token.objects.get_or_create(user=employee)

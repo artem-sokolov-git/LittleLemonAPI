@@ -2,10 +2,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
-from .views import MenuItemViewSet
+from .views import MenuItemViewSet, ManagerUserViewSet, DeliveryCrewViewSet
 
 router = DefaultRouter()
 router.register(r"menu-items", MenuItemViewSet)
+router.register(r"groups/manager/users", ManagerUserViewSet, basename="manager")
+router.register(
+    r"groups/delivery-crew/users", DeliveryCrewViewSet, basename="delivery-crew"
+)
 
 urlpatterns = [
     path("", include(router.urls)),
