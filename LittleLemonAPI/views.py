@@ -124,6 +124,7 @@ class CartViewSet(viewsets.ViewSet):
                 {"Success!": "Menu item has been successfully added to your cart."},
                 status=status.HTTP_201_CREATED,
             )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         """Удаляет все товары из корзины текущего пользователя."""
