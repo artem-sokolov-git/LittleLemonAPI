@@ -116,7 +116,7 @@ class CartViewSet(viewsets.ViewSet):
 
     def create(self, request):
         """Добавляет товар в корзину текущего пользователя."""
-        serializer = CartSerializer(data=request.data, context={"request": request})
+        serializer = CartSerializer(data=request.data)
         if serializer.is_valid():
             # Set the current user as the owner of the shopping cart
             serializer.save(user=request.user)
@@ -124,7 +124,6 @@ class CartViewSet(viewsets.ViewSet):
                 {"Success!": "Menu item has been successfully added to your cart."},
                 status=status.HTTP_201_CREATED,
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         """Удаляет все товары из корзины текущего пользователя."""
