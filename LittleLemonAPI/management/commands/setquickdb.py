@@ -1,16 +1,24 @@
+import random
+
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User, Group, Permission
 from rest_framework.authtoken.models import Token
 
-from LittleLemonAPI.models import Category, MenuItem
+from LittleLemonAPI.models import Category, MenuItem, Order, Cart
 
 restaurant_staff = (
     # ["login", "password", "group"]
-    ["frankblack", "Fr@nk2007", "Admins"],
-    ["alicejohnson", "Al!ce2013", "Managers"],
-    ["bobbrown", "B0b!Brown23", "Managers"],
-    ["edwardgreen", "Edw@rdG1reen", "Delivery_Crew"],
-    ["fionablack", "F10n@BlaCk!", "Delivery_Crew"],
+    ["admin_frank", "Fr@nk2007", "Admins"],
+    ["manager_alice", "Al!ce2013", "Managers"],
+    ["manager_bob", "B0b!Brown23", "Managers"],
+    ["deliverer_edward", "Edw@rdG1reen", "Delivery_Crew"],
+    ["deliverer_fiona", "F10n@BlaCk!", "Delivery_Crew"],
+)
+
+customers = (
+    ["customer_linda", "linda_123"],
+    ["customer_franklin", "franklin_123"],
+    ["customer_sara", "sara_123"],
 )
 
 group_permissions = {
@@ -58,14 +66,29 @@ class Command(BaseCommand):
     menu item database with categories."""
 
     def handle(self, *args, **kwargs):
-        # Creates a superuser if not.
+        ### CREATE SUPERSUER
         if not User.objects.filter(username="superuser").exists():
             User.objects.create_superuser(
                 username="superuser",
                 password="superuser123",
-                email="superuser@gmail.com",
+                email="superuser@email.com",
             )
 
+        ### CREATE CATEGORIES AND MENU_ITEMS
+        for title, price, category in menu_items:
+            category_obj, _ = Category.objects.get_or_create(
+                title=category, slug=category.lower().replace(" ", "-")
+            )
+            item, _ = MenuItem.objects.get_or_create(
+                title=title,
+                defaults={
+                    "price": price,
+                    "featured": False,
+                    "category": category_obj,
+                },
+            )
+
+        ### CREATE RESTAURANT_STAFF
         for login, password, role in restaurant_staff:
             # Creates an employee if not.
             employee, created = User.objects.get_or_create(
@@ -81,28 +104,37 @@ class Command(BaseCommand):
                 employee.set_password(password)
                 employee.save()
 
-            # creates a group if there is no such group
-            if role is not None:
-                group, _ = Group.objects.get_or_create(name=role)
-                employee.groups.add(group)
+            group, _ = Group.objects.get_or_create(name=role)
+            employee.groups.add(group)
 
-                if role in group_permissions:
-                    for codename in group_permissions[role]:
-                        permission = Permission.objects.get(codename=codename)
-                        group.permissions.add(permission)
+            if role in group_permissions:
+                for codename in group_permissions[role]:
+                    permission = Permission.objects.get(codename=codename)
+                    group.permissions.add(permission)
 
             # creates tokens
             token, _ = Token.objects.get_or_create(user=employee)
 
-        for title, price, category in menu_items:
-            category_obj, _ = Category.objects.get_or_create(
-                title=category, slug=category.lower().replace(" ", "-")
-            )
-            item, _ = MenuItem.objects.get_or_create(
-                title=title,
+        ### CREATE CUSTOMERS
+        for login, password in customers:
+            customer, created = User.objects.get_or_create(
+                username=login,
                 defaults={
-                    "price": price,
-                    "featured": False,
-                    "category": category_obj,
+                    "password": password,
+                    "email": f"{login}@email.com",
                 },
             )
+
+            if created:
+                customer.set_password(password)
+                customer.save()
+
+            token, _ = Token.objects.get_or_create(user=customer)
+
+            order = Order.objects.create(customer=customer)
+            for item_data in random.sample(list(menu_items), 2):
+                title, price, category = item_data
+                menu_item = MenuItem.objects.get(title=title)
+                Cart.objects.create(
+                    order=order, menu_item=menu_item, quantity=random.randint(1, 3)
+                )

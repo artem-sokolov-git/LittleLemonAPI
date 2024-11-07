@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import User  # noqa: F401
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -39,9 +39,6 @@ class Order(models.Model):
 
     menu_item = models.ManyToManyField(MenuItem, through="Cart", related_name="orders")
 
-    def __str__(self):
-        return f"Order {self.order_id} by {self.customer.username}"
-
 
 class Cart(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -51,8 +48,3 @@ class Cart(models.Model):
     @property
     def item_subtotal(self):
         return self.menu_item.price * self.quantity
-
-    def __str__(self):
-        return (
-            f"{self.quantity} * {self.menu_item.title} in Order {self.order.order_id}"
-        )
