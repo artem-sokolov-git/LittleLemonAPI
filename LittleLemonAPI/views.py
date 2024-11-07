@@ -5,11 +5,11 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions
 
 
-from .models import MenuItem, Cart
-from .serializers import UserSerializer, MenuItemSerializer, CartSerializer
+from .models import MenuItem
+from .serializers import UserSerializer, MenuItemSerializer
 from .permissions import IsAdminOrManager, IsManagerOrDeliveryCrew  # noqa: F401
 
 
@@ -96,40 +96,3 @@ class MenuItemViewSet(viewsets.ModelViewSet):
     search_fields = ["category__title", "title"]
     ordering_fields = ["price"]
     permission_classes = [DjangoModelPermissions]
-
-
-class CartViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
-
-    def list(self, request):
-        """Возвращает текущие товары в корзине для пользователя."""
-        cart_items = Cart.objects.filter(user=request.user)
-        serializer = CartSerializer(cart_items, many=True)
-        total_price = Cart.get_total_price(request.user)
-        return Response(
-            {
-                "Count": f"{len(cart_items)}",
-                "Total_price": total_price,
-                "Items": serializer.data,
-            }
-        )
-
-    def create(self, request):
-        """Добавляет товар в корзину текущего пользователя."""
-        serializer = CartSerializer(data=request.data)
-        if serializer.is_valid():
-            # Set the current user as the owner of the shopping cart
-            serializer.save(user=request.user)
-            return Response(
-                {"Success!": "Menu item has been successfully added to your cart."},
-                status=status.HTTP_201_CREATED,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request):
-        """Удаляет все товары из корзины текущего пользователя."""
-        Cart.objects.filter(user=request.user).delete()
-        return Response(
-            {"Success!": "Your cart has been successfully emptied."},
-            status=status.HTTP_204_NO_CONTENT,
-        )

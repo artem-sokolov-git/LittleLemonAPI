@@ -11,7 +11,6 @@ restaurant_staff = (
     ["bobbrown", "B0b!Brown23", "Managers"],
     ["edwardgreen", "Edw@rdG1reen", "Delivery_Crew"],
     ["fionablack", "F10n@BlaCk!", "Delivery_Crew"],
-    ["test_user", "test_user_pass_123", None],
 )
 
 group_permissions = {
@@ -28,8 +27,15 @@ group_permissions = {
         "add_menuitem",
         "change_category",
         "change_menuitem",
+        "view_order",
+        "add_order",
+        "change_order",
+        "delete_order",
     ],
-    # "Delivery_Crew": {...},
+    "Delivery_Crew": [
+        "view_order",
+        "change_order",
+    ],
 }
 
 menu_items = (

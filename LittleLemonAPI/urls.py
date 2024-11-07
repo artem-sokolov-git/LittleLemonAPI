@@ -2,11 +2,10 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
-from .views import MenuItemViewSet, CartViewSet, ManagerUserViewSet, DeliveryCrewViewSet
+from .views import MenuItemViewSet, ManagerUserViewSet, DeliveryCrewViewSet
 
 router = DefaultRouter()
 router.register(r"menu-items", MenuItemViewSet)
-router.register(r"cart/menu-items", CartViewSet, basename="cart")
 router.register(r"groups/manager/users", ManagerUserViewSet, basename="manager")
 router.register(
     r"groups/delivery-crew/users", DeliveryCrewViewSet, basename="delivery-crew"
