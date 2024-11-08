@@ -1,26 +1,35 @@
-SUPERUSER:
-    login: superuser
-    password: superuser123
+LOGINS AND PASSWORDS:
 
-ADMINS:
-    ADMIN:
-    login: frankblack
-    password: p#LFe#sVEdxT3Lx
+    SUPERUSER ["login", "password"]:
+        ["superuser" - "superuser123"]
 
-MANAGERS:
-    MANAGER_1:
-        login: alicejohnson
-        password: 7iF54Hq#ub7nP8b
+    RESTAURANT_STUFF ["login", "password", "group"]:
+        ["admin_frank", "Fr@nk2007", "Admins"],
+        ["manager_alice", "Al!ce2013", "Managers"],
+        ["manager_bob", "B0b!Brown23", "Managers"],
+        ["deliverer_edward", "Edw@rdG1reen", "Delivery_Crew"],
+        ["deliverer_fiona", "F10n@BlaCk!", "Delivery_Crew"],
 
-    MANAGER_2:
-        login: bobbrown
-        password: rc3i.X3brxXZnbg
+    CUSTOMERS ["login", "password"]:
+        ["customer_linda", "linda_123"]
+        ["customer_franklin", "franklin_123"],
+        ["customer_sara", "sara_123"],
 
-DELIVERY_CREW:
-    DELIVERMAN_1:
-        login: edwardgreen
-        password: .aTc3#ti.ed86QK
+    Description:
+        The values are taken from the test script in LittleLemonAPI/management/commands/setquickdb.py.
+        If for some reason the bases appear to be empty run the following command:
+        ==========================================================================
+        rm -rf db.sqlite3 && \
+        python manage.py migrate && \
+        python manage.py setquickdb && \
+        python manage.py runserver
+        ==========================================================================
 
-    DELIVERMAN_2:
-        login: fionablack
-        password: !!L2M!CEEgm#zi7
+PROJECT STRUCTURE AND API ROUTES:
+
+    1. User registration and token generation endpoints
+    Description:
+    Here it's just like the job, you can authenticate or authorize with a token or session.
+
+    
+

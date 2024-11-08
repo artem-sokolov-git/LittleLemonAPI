@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class IsAdminOrManager(permissions.BasePermission):
+class IsAdminOrManagerOrDeliveryCrew(permissions.BasePermission):
     def has_permission(self, request, view):
         return (
             request.user
@@ -9,6 +9,7 @@ class IsAdminOrManager(permissions.BasePermission):
             and (
                 request.user.groups.filter(name="Admins").exists()
                 or request.user.groups.filter(name="Managers").exists()
+                or request.user.groups.filter(name="Delivery_Crew").exists()
             )
         )
 
