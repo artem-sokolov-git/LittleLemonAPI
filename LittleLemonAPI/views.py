@@ -23,18 +23,14 @@ from .permissions import (
 
 class ManagerViewSet(viewsets.ModelViewSet):
     """
-    Available actions:
-    -------------------------------------
-    * GET /api/groups/manager/
-    --------------------------------------
-    * GET /api/groups/manager/add/
-    --------------------------------------
-    * POST /api/groups/manager/add/
-    --------------------------------------
-    * DELETE /api/groups/manager/remove/<id>
-    -------------------------------------
-    Access Rights:
-        Only managers and the delivery team have access to this ViewSet.
+    Features:
+    The path /api/groups/manager/ displays the current members of the Managers group.
+    You can add a new member by going to /api/groups/manager/add/.
+    You can remove a member from the group by going to /api/groups/manager/remove/id,
+    where id is the user's identifier.
+
+    Permissions:
+    Only Admins and Managers have the rights to edit the data.
     """
 
     queryset = User.objects.filter(groups__name="Managers")
@@ -84,18 +80,15 @@ class ManagerViewSet(viewsets.ModelViewSet):
 
 class DeliveryCrewViewSet(viewsets.ModelViewSet):
     """
-    Available actions:
-    -------------------------------------
-    * GET /api/groups/delivery-crew/
-    --------------------------------------
-    * GET /api/groups/delivery-crew/add/
-    --------------------------------------
-    * POST /api/groups/delivery-crew/add/
-    --------------------------------------
-    * DELETE /api/groups/delivery-crew/remove/<id>
-    -------------------------------------
-    Access Rights:
-        Only managers and the delivery team have access to this ViewSet.
+    Features:
+    The path /api/groups/delivery-crew/ displays the current members of the Delivery Crew group.
+    You can add a new member by going to /api/groups/delivery-crew/add/
+    You can remove a member from the group by going to /api/groups/delivery-crew/remove/id
+    where id is the user's identifier.
+
+    Permissions:
+    Only members of the Managers group have the rights to edit the data.
+    Members of the Delivery Crew can view the list of members.
     """
 
     queryset = User.objects.filter(groups__name="Delivery_Crew")
@@ -144,6 +137,11 @@ class DeliveryCrewViewSet(viewsets.ModelViewSet):
 
 
 class MenuItemViewSet(viewsets.ModelViewSet):
+    """
+    All users can view menu items, but only Admins and Managers can edit them.
+    Items can be sorted and searched by categories.
+    """
+
     queryset = MenuItem.objects.all()
     serializer_class = MenuItemSerializer
     filter_backends = [SearchFilter, OrderingFilter]
@@ -154,11 +152,15 @@ class MenuItemViewSet(viewsets.ModelViewSet):
 
 class CartViewSet(viewsets.ModelViewSet):
     """
+    Features:
     Adding an item to the cart automatically creates an order.
-    Only the customer and admin can interact with the shopping cart.
     Go to /api/orders to view your order.
-    To clear the cart go to /api/cart/menu-items/clear/ and click delete.
+    To clear the cart, go to /api/cart/menu-items/clear/ and click delete.
+
+    Permissions:
+    Only the customer and admin can interact with the shopping cart.
     """
+
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [IsOwnerOrAdmin]
@@ -179,16 +181,17 @@ class CartViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     """
-    Особенности:
-    Каждый Order имеет уникальный order_id на который можно перейти указав его как query
-    Например: api/orders/50dfbd62-9bb5-4692-83a5-1d6b65b58e58 перенесет вас на страницу
-    заказа.
+    Features:
+    Each order has a unique order_id that can be accessed by using it as a query.
+    For example: api/orders/50dfbd62-9bb5-4692-83a5-1d6b65b58e58 will bring you
+    to the order page.
 
-    Права:
-    Менеджеры имеют полные права для всех заказов
-    Deliverer может взаимодействовать только со своим заказом
-    Customers могут просматривать только свои заказы
+    Permissions:
+    Managers have full rights to all orders.
+    Deliverers can only interact with their own orders.
+    Customers can view only their own orders.
     """
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [DjangoModelPermissions]

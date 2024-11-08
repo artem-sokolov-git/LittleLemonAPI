@@ -36,7 +36,6 @@ group_permissions = {
         "change_category",
         "change_menuitem",
         "view_order",
-        "add_order",
         "change_order",
         "delete_order",
     ],

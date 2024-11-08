@@ -25,11 +25,7 @@ LOGINS AND PASSWORDS:
         python manage.py runserver
         ==========================================================================
 
-PROJECT STRUCTURE AND API ROUTES:
-
-    1. User registration and token generation endpoints
-    Description:
-    Here it's just like the job, you can authenticate or authorize with a token or session.
-
-    
+NOTES:
+    Detailed information is present in the headers. In the root of api/ there is a path map where 
+    you can start. I am a beginner and this project took me a lot of time :)
 
