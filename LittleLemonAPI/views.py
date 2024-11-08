@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User
 
-from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions
 
 
 from .models import MenuItem, Cart, Order
@@ -13,7 +15,7 @@ from .serializers import (
     CartSerializer,
     OrderSerializer,
 )
-from .permissions import IsAdminOrManager, IsManagerOrDeliveryCrew
+from .permissions import IsAdminOrManager, IsManagerOrDeliveryCrew, IsOwnerOrAdmin
 
 
 class ManagerViewSet(viewsets.ModelViewSet):
@@ -40,14 +42,20 @@ class MenuItemViewSet(viewsets.ModelViewSet):
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrAdmin]
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff:
-            return Cart.objects.all()
-        else:
-            return Cart.objects.filter(order__customer=user)
+        return Cart.objects.filter(order__customer=user)
+
+    @action(detail=False, methods=['delete'], url_path='clear')
+    def clear_cart(self, request):
+        user = request.user
+        Cart.objects.filter(order__customer=user).delete()
+        return Response(
+            {"success": "All items have been deleted!"},
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 
 class OrderViewSet(viewsets.ModelViewSet):

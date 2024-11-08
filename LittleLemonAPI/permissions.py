@@ -12,6 +12,7 @@ class IsAdminOrManager(permissions.BasePermission):
             )
         )
 
+
 class IsManagerOrDeliveryCrew(permissions.BasePermission):
     def has_permission(self, request, view):
         return (
@@ -22,3 +23,10 @@ class IsManagerOrDeliveryCrew(permissions.BasePermission):
                 or request.user.groups.filter(name="Delivery_Crew").exists()
             )
         )
+
+
+class IsOwnerOrAdmin(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_staff:
+            return True
+        return obj.order.customer == request.user
