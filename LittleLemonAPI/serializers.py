@@ -1,9 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 from .models import MenuItem, Cart, Order
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -11,6 +12,40 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "email",
         )
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+
+        managers_group, _ = Group.objects.get_or_create(name="Managers")
+        if managers_group not in user.groups.all():
+            user.groups.add(managers_group)
+
+        if not Token.objects.filter(user=user).exists():
+            Token.objects.create(user=user)
+
+        return user
+
+
+class DeliveryCrewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "email",
+        )
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+
+        managers_group, _ = Group.objects.get_or_create(name="Delivery_Crew")
+        if managers_group not in user.groups.all():
+            user.groups.add(managers_group)
+
+        if not Token.objects.filter(user=user).exists():
+            Token.objects.create(user=user)
+
+        return user
 
 
 class MenuItemSerializer(serializers.ModelSerializer):

@@ -6,7 +6,7 @@ from .views import (
     MenuItemViewSet,
     OrderViewSet,
     CartViewSet,
-    ManagerUserViewSet,
+    ManagerViewSet,
     DeliveryCrewViewSet,
 )
 
@@ -14,7 +14,7 @@ router = DefaultRouter()
 router.register(r"menu-items", MenuItemViewSet)
 router.register(r"orders", OrderViewSet)
 router.register(r"cart/menu-items", CartViewSet)
-router.register(r"groups/manager/users", ManagerUserViewSet, basename="manager")
+router.register(r"groups/manager/users", ManagerViewSet, basename="manager")
 router.register(
     r"groups/delivery-crew/users", DeliveryCrewViewSet, basename="delivery-crew"
 )
