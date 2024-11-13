@@ -28,4 +28,3 @@ LOGINS AND PASSWORDS:
 NOTES:
     Detailed information is present in the headers. In the root of api/ there is a path map where 
     you can start. I am a beginner and this project took me a lot of time :)
-

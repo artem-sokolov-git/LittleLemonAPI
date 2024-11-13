@@ -28,6 +28,10 @@ class IsManagerOrDeliveryCrew(permissions.BasePermission):
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.user.is_staff:
+        if (
+            request.user.groups.filter(name="Admins").exists()
+            or obj.order.customer == request.user
+        ):
             return True
-        return obj.order.customer == request.user
+        else:
+            return False
